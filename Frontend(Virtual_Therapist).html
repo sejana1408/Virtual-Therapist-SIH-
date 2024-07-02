@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>maddyworks</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <script
+      src="https://kit.fontawesome.com/eb04ca6b7f.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div id="header">
+      <div class="container">
+        <nav style="position:fixed; top:0; left:0; width: 100%;">
+          <img src="" class="logo" />
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/#about">Disorders</a></li>
+            <li><a href="/#services">Exercises</a></li>
+            <li><a href="/#contact">Consultants</a></li>
+          </ul>
+        </nav>
+        <div
+          class="header-text"
+          style="max-width: 60rem; margin-left: auto; margin-right: auto"
+        >
+          <h1>
+            Hi,<br />I'm<span> A virtual assistant</span><br />
+            created to help u guys with some speech therapy disorders
+          </h1>
+        </div>
+      </div>
+    </div>
+    <!-----------about---------------------------->
+
+    <!------------services------->
+    <div> 
+      <form method="POST" action="/process"> 
+          <button type="submit">Call Function</button> 
+      </form>   
+    </div>
+    <div
+      id="services"
+      style="max-width: 60rem; margin-left: auto; margin-right: auto"
+    >
+      <div
+        id="modal"
+        style="display: none; position: fixed; backdrop-filter: blur(16px); top: 0; left: 0;"
+      >
+        <div
+        id="modal-content"
+          style="max-width: 50rem; background-color: rgba(19, 24, 43, 0.6)"
+        >
+    </div>
+      </div>
+      <div class="container">
+        <h1 class="sub-title">Contact</h1>
+        <div class="services-list">
+          <div>
+            <i class="fa-solid fa-user-nurse"></i>
+            <h2>Babblings Roopa's clinic</h2>
+            <h3>+91 8767980987</h3>
+            <p>
+             Tambaram, Chennai -73.
+            </p>
+            <a href="#">Learn more</a>
+          </div>
+          <div>
+            <i class="fa-solid fa-user-nurse"></i>
+            <h2>Jack's clinic </h2>
+            <h3>+91 7299945678</h3>
+            <p>
+              Anna Nagar, Chennai-100
+            </p>
+            <a href="#">Learn more</a>
+          </div>
+          <div>
+            <i class="fa-solid fa-user-nurse"></i>
+            <h2>Richard speech center</h2>
+            <h3>+91 7299945867</h3>
+            <p>
+              Medavakkam, Chennai-80
+            </p>
+            <a href="#">Learn more</a>
+          </div>
+          <div>
+            <i class="fa-solid fa-user-nurse"></i>
+            <h2>Vicky's clinic </h2>
+            <h3>+91 8451945678</h3>
+            <p>
+              Ramapuram,Chennai-89
+            </p>
+            <a href="javascript:void(0)" onclick="learnMore(`captcha`)">Learn more</a>
+          </div>
+        </div>
+      </div>
+      <div class="container" style="padding: 2rem;display:flex;flex-direction:column;gap:1rem;">
+        <h1 class="sub-title">Excercises</h1>
+        <div id="main" style="width:100%">
+            <template id="playAudio">
+                <span style="font-weight: bold; font-size:2rem;">Cross</span>
+                <div>
+                    <button class="playBtn" style="display: block; padding: 1rem; background-color: #ff00c3">
+                        Play
+                    </button>
+                    <button class="speakBtn" style="display: block; padding: 1rem; background-color: #ff00c3;margin-top: 0.25rem;">
+                        Speak
+                    </button>
+                    <audio></audio>
+                </div>
+            </template>
+            <script type="text/javascript">
+                const words = ["bah", "cu", "su", "socks"];
+
+                const template = document.querySelector("#playAudio");
+                const root = document.querySelector("#main");
+
+                for (const word of words) {
+                    const clone = template.content.cloneNode(true);
+                    clone.style = "display: flex; gap: 1rem; align-items: center;width:100%";
+                    const playBtn = clone.querySelector(".playBtn");
+                    const speakBtn = clone.querySelector(".speakBtn");
+                    const span = clone.querySelector("span");
+                    const audio = clone.querySelector("audio");
+
+                    span.textContent = word;
+
+                    audio.src = `${word}.mp3`;
+
+                    playBtn.addEventListener("click", () => {
+                        audio.play();
+                    });
+
+                    speakBtn.addEventListener("click", () => {
+                        // Send the word to Flask backend
+                        fetch('/play_audio', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ word: word }),
+                        })
+                            .then(response => response.json())
+                            .then(data => console.log(data))
+                            .catch(error => console.error(error));
+                    });
+
+                    const div = document.createElement("div");
+                    div.setAttribute(
+                        "style",
+                        "display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; align-items: center; padding:1rem"
+                    );
+                    div.appendChild(clone);
+                    root.appendChild(div);
+                }
+            </script>
+        </div>
+    </div>
+
+    </div>
+    <!------------contact--------------->
+
+<!--------exercises--------->
+
+
+    <script>
+      var tablinks = document.getElementsByClassName("tab-links");
+      var tabcontents = document.getElementsByClassName("tab-contents");
+      const modal = document.querySelector("#modal")
+      const modalContent = document.querySelector("#modal-content")
+      function opentab(tabname) {
+        for (tablink of tablinks) {
+          tablink.classList.remove("active-link");
+        }
+        for (tabcontent of tabcontents) {
+          tabcontent.classList.remove("active-tab");
+        }
+        event.currentTarget.classList.add("active-link");
+        document.getElementById(tabname).classList.add("active-tab");
+      }
+      function learnMore(name) {
+        console.log(name)
+        modal.style.display = "block"
+        modalContent.textContent = abstracts[name]
+      }
+
+
+    </script>
+  </body>
+</html>
